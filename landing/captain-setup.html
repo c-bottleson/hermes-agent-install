@@ -70,9 +70,9 @@
         <p>Save everything to your notepad.</p>
     </div>
 
-    <!-- VPS SETUP (existing_vps + fresh) -->
-    <div class="step vps-needed">
-        <h3><span class="step-number">2</span> Provision the Captain's VPS</h3>
+    <!-- VPS SETUP (fresh only) -->
+    <div class="step fresh-only">
+        <h3><span class="step-number">2</span> Provision a VPS</h3>
         <div class="info-box">
             <strong>⏱ Note:</strong> VPS provisioning takes 15-30 min on Contabo (instant on Vultr). Set up the other accounts while you wait.
         </div>
@@ -113,6 +113,17 @@
                     <code>VPS IP Address: _______________</code><br>
                     <code>VPS Root Password: _______________</code></li>
             </ol>
+        </div>
+    </div>
+
+    <!-- EXISTING VPS EXPLANATION -->
+    <div class="step existing-vps-only">
+        <h3><span class="step-number">2</span> Captain Runs Alongside Your Main Agent</h3>
+        <div class="info-box">
+            <strong>Same VPS, separate profile.</strong> The Captain gets its own profile directory, its own Telegram bot, its own gateway service. Your main Hermes stays untouched. They share the same OpenRouter key — no extra API setup needed.
+        </div>
+        <div class="script-box">
+            "Your Captain will run alongside your existing agent on the same server. Same hardware, separate brain. It gets its own Telegram bot so the two agents don't get confused."
         </div>
     </div>
 
@@ -228,15 +239,10 @@
                 el.classList.toggle('hidden', installType !== 'fresh');
             });
 
-            // Show/hide VPS section (hidden for "existing" which already has a VPS)
-            document.querySelectorAll('.vps-needed').forEach(el => {
-                el.classList.toggle('hidden', installType === 'existing');
+            // Show/hide existing-vps-only sections
+            document.querySelectorAll('.existing-vps-only').forEach(el => {
+                el.classList.toggle('hidden', installType !== 'existing_vps');
             });
-
-            // Toggle VPS instructions
-            const vps = document.querySelector('input[name="vps"]:checked')?.value || 'contabo';
-            document.getElementById('vps-contabo').classList.toggle('hidden', vps !== 'contabo');
-            document.getElementById('vps-vultr').classList.toggle('hidden', vps !== 'vultr');
 
             generateScript();
         }
@@ -305,17 +311,8 @@
                 s += `echo "  CAPTAIN PROTOCOL — Add to Existing VPS"\n`;
                 s += `echo "═══════════════════════════════════════════════════════"\n\n`;
 
-                s += `# Add Captain's bot token to .env\n`;
-                s += `# (Your main agent keeps its own token)\n`;
-                s += `if ! grep -q "CAPTAIN_TELEGRAM_BOT_TOKEN" ~/.hermes/.env 2>/dev/null; then\n`;
-                s += `    echo "" >> ~/.hermes/.env\n`;
-                s += `    echo "CAPTAIN_TELEGRAM_BOT_TOKEN=\${TELEGRAM_TOKEN}" >> ~/.hermes/.env\n`;
-                s += `    echo "CAPTAIN_TELEGRAM_ALLOWED_USERS=\${TELEGRAM_USER_ID}" >> ~/.hermes/.env\n`;
-                s += `    echo "CAPTAIN_TELEGRAM_HOME_CHANNEL=\${TELEGRAM_USER_ID}" >> ~/.hermes/.env\n`;
-                s += `    echo "Captain bot token added to .env"\n`;
-                s += `else\n`;
-                s += `    echo "Captain bot token already in .env, skipping"\n`;
-                s += `fi\n\n`;
+                s += `# Each profile has its own .env — write Captain's\n`;
+                s += `# (Your main agent's .env is untouched)\n`;
             }
 
             // Existing instance: just create the profile
@@ -336,6 +333,19 @@
             s += `echo "Creating Captain profile..."\n`;
             s += `hermes profile create \${PROFILE_NAME} 2>/dev/null || true\n`;
             s += `mkdir -p \${PROFILE_DIR}/{sessions,logs,skills,memory}\n\n`;
+
+            // For existing_vps: write Captain's own .env (shares OpenRouter key from main)
+            if (installType === 'existing_vps') {
+                s += `# Captain's own .env (shares OpenRouter key from main)\n`;
+                s += `MAIN_KEY=$(grep OPENROUTER_API_KEY ~/.hermes/.env | head -1)\n`;
+                s += `cat << ENVFILE > \${PROFILE_DIR}/.env\n`;
+                s += `\${MAIN_KEY}\n`;
+                s += `TELEGRAM_BOT_TOKEN=\${TELEGRAM_TOKEN}\n`;
+                s += `TELEGRAM_ALLOWED_USERS=\${TELEGRAM_USER_ID}\n`;
+                s += `TELEGRAM_HOME_CHANNEL=\${TELEGRAM_USER_ID}\n`;
+                s += `ENVFILE\n`;
+                s += `echo "Captain .env written to \${PROFILE_DIR}/.env"\n\n`;
+            }
 
             // Captain system prompt (generic — discovers everything through conversation)
             s += `# ─── Captain System Prompt ──────────────────────────────────\n`;
@@ -411,16 +421,22 @@
             s += `#!/usr/bin/env python3\n`;
             s += `"""Send Captain's first message."""\n`;
             s += `import requests, sys, os\n\n`;
-            s += `# Read from .env\n`;
+            s += `# Read from profile .env (falls back to main .env)\n`;
+            s += `import pathlib\n`;
             s += `env = {}\n`;
-            s += `with open(os.path.expanduser("~/.hermes/.env")) as f:\n`;
-            s += `    for line in f:\n`;
-            s += `        if "=" in line and not line.strip().startswith("#"):\n`;
-            s += `            k, v = line.strip().split("=", 1)\n`;
-            s += `            env[k] = v\n\n`;
-            s += `# For existing_vps, use Captain-specific vars if available\n`;
-            s += `token = env.get("CAPTAIN_TELEGRAM_BOT_TOKEN") or env.get("TELEGRAM_BOT_TOKEN", "")\n`;
-            s += `chat_id = env.get("CAPTAIN_TELEGRAM_HOME_CHANNEL") or env.get("TELEGRAM_HOME_CHANNEL", "")\n\n`;
+            s += `for env_path in [\n`;
+            s += `    pathlib.Path(__file__).parent / ".env",\n`;
+            s += `    pathlib.Path.home() / ".hermes" / ".env",\n`;
+            s += `]:\n`;
+            s += `    if env_path.exists():\n`;
+            s += `        with open(env_path) as f:\n`;
+            s += `            for line in f:\n`;
+            s += `                if "=" in line and not line.strip().startswith("#"):\n`;
+            s += `                    k, v = line.strip().split("=", 1)\n`;
+            s += `                    env.setdefault(k, v)\n`;
+            s += `        break\n\n`;
+            s += `token = env.get("TELEGRAM_BOT_TOKEN", "")\n`;
+            s += `chat_id = env.get("TELEGRAM_HOME_CHANNEL", "")\n\n`;
             s += `msg = """Hey! I'm your Captain — your AI agent. I live on your server and work for you 24/7.
 
 Let's figure out what we should build together.
@@ -444,18 +460,24 @@ Let's figure out what we should build together.
                 s += `hermes gateway install\n`;
                 s += `hermes gateway start\n`;
                 s += `sleep 5\n\n`;
+                s += `# Now install Captain's gateway as a separate service\n`;
+                s += `hermes --profile \${PROFILE_NAME} gateway install\n`;
+                s += `hermes --profile \${PROFILE_NAME} gateway start\n`;
+                s += `sleep 5\n\n`;
             } else if (installType === 'existing_vps') {
-                s += `# Gateway binary already installed — just start the Captain profile\n`;
+                s += `# Install Captain gateway as a separate systemd service\n`;
+                s += `hermes --profile \${PROFILE_NAME} gateway install\n`;
+                s += `hermes --profile \${PROFILE_NAME} gateway start\n`;
+                s += `sleep 5\n\n`;
             } else {
                 s += `# Restart gateway to pick up the new bot token\n`;
                 s += `hermes gateway restart 2>/dev/null || true\n`;
                 s += `sleep 5\n\n`;
+                s += `# Start Captain gateway\n`;
+                s += `hermes --profile \${PROFILE_NAME} gateway install\n`;
+                s += `hermes --profile \${PROFILE_NAME} gateway start\n`;
+                s += `sleep 5\n\n`;
             }
-
-            s += `echo "Starting Captain profile gateway..."\n`;
-            s += `hermes gateway install --profile \${PROFILE_NAME} 2>/dev/null || true\n`;
-            s += `hermes gateway start --profile \${PROFILE_NAME} 2>/dev/null || true\n`;
-            s += `sleep 5\n\n`;
 
             // Send first message
             s += `echo "Sending first message..."\n`;
