@@ -1,0 +1,25 @@
+{
+  "jobs": [
+    {
+      "name": "Daily Progress Report",
+      "schedule": "0 9 * * *",
+      "description": "Send the customer a morning update: what was built yesterday, what's being built today, what's needed from them (if anything), and ETA for the next milestone.",
+      "prompt": "Read the project state from customer.json and the recent activity logs. Send a concise daily progress report to the customer following the Captain Protocol daily report format. If there's nothing to report (no activity yesterday), send a brief 'working on it' message instead of going silent. If the project is in 'shipped' status, switch to a weekly maintenance tone.",
+      "deliver": "origin"
+    },
+    {
+      "name": "Weekly Check-in",
+      "schedule": "0 10 * * 5",
+      "description": "Friday check-in: how's the project going, any issues, proactive suggestions for improvements or next features.",
+      "prompt": "Review the project status and recent customer interactions. Send a friendly Friday check-in: ask how things are working, mention any proactive improvements you've noticed they could benefit from, and suggest the next feature or optimization if the current project is stable. Keep it warm and non-technical.",
+      "deliver": "origin"
+    },
+    {
+      "name": "Dead Man's Switch",
+      "schedule": "0 */12 * * *",
+      "description": "If the customer hasn't responded to a decision point in 48h, build the recommended option and move on.",
+      "prompt": "Check the last customer interaction timestamp. If there is an unanswered decision point older than 48 hours, build the recommended option (the one you would have suggested) and send a message saying: 'I went ahead and built [X] since you were busy. Here's what it does: [brief explanation]. Let me know if you want changes.' Then update the project status and continue building.",
+      "deliver": "origin"
+    }
+  ]
+}

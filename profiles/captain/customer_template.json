@@ -1,0 +1,36 @@
+{
+  "name": "{CUSTOMER_NAME}",
+  "business_name": "{BUSINESS_NAME}",
+  "website": "{WEBSITE}",
+  "install_date": "{INSTALL_DATE}",
+  "path": "{PATH}",
+  "status": "discovery",
+  "messaging": {
+    "platform": "telegram",
+    "bot_token": "{BOT_TOKEN}",
+    "chat_id": "{CHAT_ID}"
+  },
+  "api": {
+    "provider": "openrouter",
+    "model": "google/gemini-2.5-flash",
+    "key": "{API_KEY}"
+  },
+  "upsells": {
+    "captain_protocol": true,
+    "custom_skills": [],
+    "growth_audit": false,
+    "review_pack": false
+  },
+  "cron_jobs": {
+    "daily_report": "0 9 * * *",
+    "weekly_checkin": "0 10 * * 5",
+    "dead_man_switch": "0 */12 * * *"
+  },
+  "project": {
+    "name": null,
+    "type": null,
+    "started": null,
+    "shipped": null,
+    "current_task": null
+  }
+}
