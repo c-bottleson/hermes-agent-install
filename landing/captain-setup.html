@@ -53,15 +53,16 @@
     <div class="step">
         <h3><span class="step-number">1</span> Installation Type</h3>
         <div class="script-box">
-            "We're adding the Captain Protocol to your server. This gives your agent a much more proactive personality — it'll research your business, propose projects, and build things without you having to ask."<br><br>
+            "We're adding the Captain Protocol. This gives you a proactive agent that researches your business, proposes projects, and ships without waiting for permission."<br><br>
 
-            "Quick question: <strong>do you already have an AI agent running on your server from a previous setup?</strong>"
+            "Three options depending on what you've got:"
         </div>
         <div class="action-box">
             <h4>🖱️ Select Install Type</h4>
             <div class="radio-group">
-                <label class="radio-option selected"><input type="radio" name="install_type" value="existing" checked onchange="updateAll()"> <strong>Existing Instance</strong> — Agent already installed, just add Captain profile</label>
-                <label class="radio-option"><input type="radio" name="install_type" value="fresh" onchange="updateAll()"> <strong>Fresh Install</strong> — New VPS or agent not installed yet</label>
+                <label class="radio-option selected"><input type="radio" name="install_type" value="existing" checked onchange="updateAll()"> <strong>Existing Instance</strong> — Customer already has Hermes, upgrade it to Captain</label>
+                <label class="radio-option"><input type="radio" name="install_type" value="existing_vps" onchange="updateAll()"> <strong>Existing VPS, New Captain</strong> — Hermes is already running on this VPS, add Captain as a second agent alongside it</label>
+                <label class="radio-option"><input type="radio" name="install_type" value="fresh" onchange="updateAll()"> <strong>Fresh Install</strong> — New VPS, install everything from scratch</label>
             </div>
         </div>
     </div>
@@ -112,12 +113,15 @@
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div class="phase-header fresh-only">
         <h2>PHASE 3: CREDENTIALS</h2>
-        <p>Fresh install only. If adding to existing instance, these are already configured.</p>
+        <p>What credentials does this install need?</p>
     </div>
 
     <div class="step fresh-only">
-        <div class="script-box">
+        <div class="script-box" id="cred-intro-fresh">
             "I need your credentials from the Agent Install call. Check your notepad — you should have your OpenRouter key, Telegram bot token, and Telegram user ID saved there."
+        </div>
+        <div class="script-box" id="cred-intro-existing-vps" class="hidden">
+            "The Captain needs its own Telegram bot — separate from your main agent. Create a new bot in @BotFather (just like you did for your main agent). Your OpenRouter key is already on the server."
         </div>
     </div>
 
@@ -133,7 +137,7 @@
         <div class="script-box" id="deploy-intro-existing">
             "Here's the Captain install script. It has <strong>a few blanks at the top</strong> — fill those in from your notepad, then paste the whole thing into your SSH terminal. It takes about 60 seconds."
         </div>
-        <div class="script-box fresh-only" id="deploy-intro-fresh">
+        <div class="script-box" id="deploy-intro-fresh" class="hidden">
             "Here's the full install script — it sets up everything from scratch. It has <strong>several blanks at the top</strong> — fill those in from your notepad, then paste the whole thing into your SSH terminal. Give it about 2 minutes."
         </div>
         <div class="action-box">
@@ -190,10 +194,22 @@
             document.querySelectorAll('.radio-option').forEach(el => el.classList.remove('selected'));
             document.querySelectorAll('input:checked').forEach(el => el.closest('.radio-option').classList.add('selected'));
 
-            // Show/hide fresh-only sections
+            // Show/hide credential sections (hidden for "existing" which has everything already)
             document.querySelectorAll('.fresh-only').forEach(el => {
-                el.classList.toggle('hidden', installType !== 'fresh');
+                el.classList.toggle('hidden', installType === 'existing');
             });
+
+            // Toggle credential intro messages
+            const introFresh = document.getElementById('cred-intro-fresh');
+            const introExistingVps = document.getElementById('cred-intro-existing-vps');
+            if (introFresh) introFresh.classList.toggle('hidden', installType !== 'fresh');
+            if (introExistingVps) introExistingVps.classList.toggle('hidden', installType !== 'existing_vps');
+
+            // Toggle deploy intro messages
+            const deployExisting = document.getElementById('deploy-intro-existing');
+            const deployFresh = document.getElementById('deploy-intro-fresh');
+            if (deployExisting) deployExisting.classList.toggle('hidden', installType !== 'existing');
+            if (deployFresh) deployFresh.classList.toggle('hidden', installType === 'existing');
 
             generateScript();
         }
@@ -225,6 +241,10 @@
                 s += `OPENROUTER_KEY="PASTE_YOUR_OPENROUTER_KEY_HERE"\n`;
                 s += `TELEGRAM_TOKEN="PASTE_YOUR_TELEGRAM_BOT_TOKEN_HERE"\n`;
                 s += `TELEGRAM_USER_ID="PASTE_YOUR_TELEGRAM_USER_ID_HERE"\n`;
+            } else if (installType === 'existing_vps') {
+                s += `# Captain gets its own Telegram bot (separate from your main agent)\n`;
+                s += `TELEGRAM_TOKEN="PASTE_CAPTAIN_BOT_TOKEN_HERE"\n`;
+                s += `TELEGRAM_USER_ID="PASTE_YOUR_TELEGRAM_USER_ID_HERE"\n`;
             } else {
                 s += `# If your bot token or user ID changed, update here:\n`;
                 s += `TELEGRAM_TOKEN=""\n`;
@@ -244,11 +264,19 @@
             s += `INSTALL_DATE="${date}"\n\n`;
 
             // Fresh install: full hermes setup
-            if (installType === 'fresh') {
+            if (installType === 'fresh' || installType === 'existing_vps') {
                 s += `echo "═══════════════════════════════════════════════════════"\n`;
-                s += `echo "  CAPTAIN PROTOCOL — Full Install"\n`;
+                if (installType === 'fresh') {
+                    s += `echo "  CAPTAIN PROTOCOL — Full Install"\n`;
+                } else {
+                    s += `echo "  CAPTAIN PROTOCOL — Add to Existing VPS"\n`;
+                }
                 s += `echo "═══════════════════════════════════════════════════════"\n\n`;
 
+            }
+
+            // Only install hermes on fresh (not existing_vps)
+            if (installType === 'fresh') {
                 s += `# System prep\n`;
                 s += `apt-get update && apt-get upgrade -y\n`;
                 s += `apt-get install -y git curl wget unzip build-essential\n\n`;
@@ -264,7 +292,25 @@
                 s += `TELEGRAM_ALLOWED_USERS=\${TELEGRAM_USER_ID}\n`;
                 s += `TELEGRAM_HOME_CHANNEL=\${TELEGRAM_USER_ID}\n`;
                 s += `ENVFILE\n\n`;
+            }
 
+            // Existing VPS: add Captain bot token to existing .env
+            if (installType === 'existing_vps') {
+                s += `# Add Captain's bot token to .env\n`;
+                s += `# (Your main Hermes keeps its own token)\n`;
+                s += `if ! grep -q "CAPTAIN_TELEGRAM_BOT_TOKEN" ~/.hermes/.env; then\n`;
+                s += `    cat << ENVFILE >> ~/.hermes/.env\n`;
+                s += `CAPTAIN_TELEGRAM_BOT_TOKEN=\${TELEGRAM_TOKEN}\n`;
+                s += `CAPTAIN_TELEGRAM_ALLOWED_USERS=\${TELEGRAM_USER_ID}\n`;
+                s += `CAPTAIN_TELEGRAM_HOME_CHANNEL=\${TELEGRAM_USER_ID}\n`;
+                s += `ENVFILE\n`;
+                s += `    echo "Captain bot token added to .env"\n`;
+                s += `else\n`;
+                s += `    echo "Captain bot token already in .env, skipping"\n`;
+                s += `fi\n\n`;
+            }
+
+            if (installType === 'fresh' || installType === 'existing_vps') {
                 s += `# Config\n`;
                 s += `cat << YAMLFILE > ~/.hermes/config.yaml\n`;
                 s += `model:\n`;
@@ -338,12 +384,16 @@
             s += `CRON_EOF\n\n`;
 
             // Profile config
-            s += `# ─── Profile Config ─────────────────────────────────────────\n`;
-            if (installType === 'fresh') {
+            // Profile config
+            if (installType === 'fresh' || installType === 'existing_vps') {
                 s += `cat << YAML_EOF > \${PROFILE_DIR}/config.yaml\n`;
                 s += `model:\n`;
                 s += `  default: google/gemini-2.5-flash\n`;
                 s += `  provider: openrouter\n`;
+                if (installType === 'existing_vps') {
+                    s += `\n# Captain uses its own Telegram bot token\n`;
+                    s += `# (loaded from CAPTAIN_TELEGRAM_BOT_TOKEN in .env)\n`;
+                }
                 s += `YAML_EOF\n\n`;
             } else {
                 s += `# Copy main config as base\n`;
@@ -385,11 +435,16 @@
             s += `chmod +x \${PROFILE_DIR}/send_first_message.py\n\n`;
 
             // Start gateway
-            s += `# ─── Start Captain Gateway ──────────────────────────────────\n`;
-            if (installType === 'fresh') {
+            // Start gateway
+            if (installType === 'fresh' || installType === 'existing_vps') {
                 s += `echo "Installing and starting Telegram gateway..."\n`;
-                s += `hermes gateway install\n`;
-                s += `hermes gateway start\n`;
+                if (installType === 'existing_vps') {
+                    s += `# For existing VPS, gateway is already installed\n`;
+                    s += `# We just need to start the Captain profile's gateway\n`;
+                } else {
+                    s += `hermes gateway install\n`;
+                    s += `hermes gateway start\n`;
+                }
                 s += `sleep 5\n\n`;
             }
 
