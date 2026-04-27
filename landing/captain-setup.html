@@ -24,125 +24,107 @@
         .hidden { display: none; }
         .warning-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 15px; margin: 10px 0; border-radius: 0 6px 6px 0; font-size: 0.95em; color: #664d03; }
         .info-box { background: #e8f4fd; border-left: 4px solid #0066cc; padding: 12px 15px; margin: 10px 0; border-radius: 0 6px 6px 0; font-size: 0.95em; color: #004488; }
-        .sidequest { background: #fff; padding: 20px; border-radius: 8px; border: 2px solid #cc6600; margin-bottom: 20px; }
-        .sidequest h3 { color: #cc6600; margin-top: 0; }
-        .sidequest ol { font-size: 14px; }
-        .sidequest ol li { margin-bottom: 8px; }
         .phase-header { background: #333; color: #fff; padding: 12px 20px; border-radius: 8px; margin: 30px 0 15px 0; }
         .phase-header h2 { color: #fff; margin: 0; font-size: 1.1em; }
         .phase-header p { color: #aaa; margin: 5px 0 0 0; font-size: 0.85em; }
         code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
         .step-number { display: inline-block; background: #0066cc; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-size: 14px; font-weight: bold; margin-right: 8px; }
-        textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: sans-serif; font-size: 14px; box-sizing: border-box; resize: vertical; }
         input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; font-size: 14px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
     <h1>Captain Protocol — Setup Flow</h1>
-    <p>The Captain is a proactive AI agent that <strong>leads</strong> — it discovers the customer's business, proposes builds, and ships without waiting for permission. This script provisions the Captain profile on a VPS.</p>
+    <p>The Captain is a proactive AI agent that <strong>leads</strong> — it discovers your business, proposes builds, and ships without waiting for permission.</p>
 
     <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- PHASE 1: DECISIONS -->
+    <!-- PHASE 1: INSTALL TYPE -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div class="phase-header">
         <h2>PHASE 1: INSTALL TYPE</h2>
-        <p>Does the customer already have a Hermes agent running?</p>
+        <p>What's already on the server?</p>
     </div>
 
     <div class="step">
         <h3><span class="step-number">1</span> Installation Type</h3>
         <div class="script-box">
-            "We're adding the Captain Protocol. This gives you a proactive agent that researches your business, proposes projects, and ships without waiting for permission."<br><br>
+            "We're adding the Captain Protocol — a proactive AI agent that researches your business, proposes projects, and builds without waiting for permission."<br><br>
 
-            "Three options depending on what you've got:"
+            "Three options depending on what you've got running:"
         </div>
         <div class="action-box">
             <h4>🖱️ Select Install Type</h4>
             <div class="radio-group">
-                <label class="radio-option selected"><input type="radio" name="install_type" value="existing" checked onchange="updateAll()"> <strong>Existing Instance</strong> — Customer already has Hermes, upgrade it to Captain</label>
-                <label class="radio-option"><input type="radio" name="install_type" value="existing_vps" onchange="updateAll()"> <strong>Existing VPS, New Captain</strong> — Hermes is already running on this VPS, add Captain as a second agent alongside it</label>
+                <label class="radio-option selected"><input type="radio" name="install_type" value="existing" checked onchange="updateAll()"> <strong>Upgrade Existing</strong> — Already have Hermes, turn it into a Captain</label>
+                <label class="radio-option"><input type="radio" name="install_type" value="existing_vps" onchange="updateAll()"> <strong>Add to Existing VPS</strong> — Hermes is running, add Captain as a second agent alongside it</label>
                 <label class="radio-option"><input type="radio" name="install_type" value="fresh" onchange="updateAll()"> <strong>Fresh Install</strong> — New VPS, install everything from scratch</label>
             </div>
         </div>
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- PHASE 2: CUSTOMER INFO -->
+    <!-- PHASE 2: CREDENTIALS -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div class="phase-header">
-        <h2>PHASE 2: CUSTOMER DETAILS</h2>
-        <p>Fill in the customer's info. This gets baked into the Captain's personality.</p>
+        <h2>PHASE 2: CREDENTIALS</h2>
+        <p>Save everything to your notepad.</p>
     </div>
 
+    <!-- NEW BOT NEEDED -->
     <div class="step">
-        <h3><span class="step-number">2</span> Customer & Business Info</h3>
-        <div class="action-box">
-            <h4>Customer Details</h4>
-            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px;">Customer First Name:</label>
-                    <input type="text" id="customer_name" placeholder="Sarah" oninput="generateScript()">
-                </div>
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px;">Business Name:</label>
-                    <input type="text" id="business_name" placeholder="Paws & Claws Grooming" oninput="generateScript()">
-                </div>
-            </div>
-            <div style="margin-top: 10px;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Website (or "none"):</label>
-                <input type="text" id="website" placeholder="https://example.com" oninput="generateScript()">
-            </div>
+        <h3><span class="step-number">2</span> Create a New Telegram Bot for the Captain</h3>
+        <div class="script-box">
+            "The Captain needs its own Telegram bot — separate from any existing agent. This takes about 2 minutes."
         </div>
+        <ol style="font-size: 14px;">
+            <li>Open Telegram, search for <strong>@BotFather</strong></li>
+            <li>Type <code>/newbot</code></li>
+            <li><strong>Name:</strong> something like <code>"My Captain"</code></li>
+            <li><strong>Username:</strong> must end in <code>bot</code>, e.g. <code>"myname_captain_bot"</code></li>
+            <li>BotFather gives you a token — <strong>save it:</strong><br>
+                <code>Captain Bot Token: _______________</code></li>
+        </ol>
 
-        <div class="action-box" style="margin-top: 15px;">
-            <h4>Customer Path</h4>
-            <div class="script-box">
-                "Which describes your situation?"
-            </div>
-            <div class="radio-group">
-                <label class="radio-option selected"><input type="radio" name="path" value="A" checked onchange="updateAll()"> <strong>Path A</strong> — Existing business (has a website or customers)</label>
-                <label class="radio-option"><input type="radio" name="path" value="B1" onchange="updateAll()"> <strong>Path B1</strong> — New business, has an idea</label>
-                <label class="radio-option"><input type="radio" name="path" value="B2" onchange="updateAll()"> <strong>Path B2</strong> — New business, needs help figuring out what to build</label>
-            </div>
-        </div>
+        <h4 style="margin-top: 20px;">Get your Telegram User ID:</h4>
+        <ol style="font-size: 14px;">
+            <li>Search for <strong>@userinfobot</strong> in Telegram</li>
+            <li>Send <code>/start</code> — it replies with your numeric ID</li>
+            <li><strong>Save it:</strong><br>
+                <code>Telegram User ID: _______________</code></li>
+        </ol>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- PHASE 3: CREDENTIALS (for fresh install) -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <div class="phase-header fresh-only">
-        <h2>PHASE 3: CREDENTIALS</h2>
-        <p>What credentials does this install need?</p>
-    </div>
-
+    <!-- OPENROUTER (fresh only) -->
     <div class="step fresh-only">
-        <div class="script-box" id="cred-intro-fresh">
-            "I need your credentials from the Agent Install call. Check your notepad — you should have your OpenRouter key, Telegram bot token, and Telegram user ID saved there."
+        <h3><span class="step-number">3</span> OpenRouter API Key</h3>
+        <div class="script-box">
+            "We need to connect the brain. OpenRouter is like a universal adapter — one account, every AI model."
         </div>
-        <div class="script-box" id="cred-intro-existing-vps" class="hidden">
-            "The Captain needs its own Telegram bot — separate from your main agent. Create a new bot in @BotFather (just like you did for your main agent). Your OpenRouter key is already on the server."
-        </div>
+        <ol style="font-size: 14px;">
+            <li>Go to <code>openrouter.ai</code> and sign up</li>
+            <li>Click <strong>Wallet/Credits</strong> → add <strong>$10</strong></li>
+            <li>Set up <strong>Auto Refill:</strong> $10 when balance drops below $2</li>
+            <li>Go to <strong>Keys</strong> → <strong>Create Key</strong> → name it <code>"Captain"</code></li>
+            <li><strong>Save it:</strong><br>
+                <code>OpenRouter API Key: _______________</code></li>
+        </ol>
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- PHASE 4: GENERATE -->
+    <!-- PHASE 3: DEPLOY -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div class="phase-header">
         <h2>PHASE 3: DEPLOY</h2>
-        <p>Customer fills in credentials at top of script, pastes into SSH.</p>
+        <p>Fill in the blanks at the top, paste into SSH.</p>
     </div>
 
     <div class="step">
-        <div class="script-box" id="deploy-intro-existing">
-            "Here's the Captain install script. It has <strong>a few blanks at the top</strong> — fill those in from your notepad, then paste the whole thing into your SSH terminal. It takes about 60 seconds."
-        </div>
-        <div class="script-box" id="deploy-intro-fresh" class="hidden">
-            "Here's the full install script — it sets up everything from scratch. It has <strong>several blanks at the top</strong> — fill those in from your notepad, then paste the whole thing into your SSH terminal. Give it about 2 minutes."
+        <div class="script-box">
+            "Here's the install script. <strong>Fill in the blanks at the top</strong> with the credentials from your notepad, then paste the whole thing into your SSH terminal. Takes about 60 seconds."
         </div>
         <div class="action-box">
-            <h4>🖱️ Copy & Give to Customer</h4>
-            <p>Customer fills in the blanks at the top, then pastes the whole script into SSH:</p>
+            <h4>🖱️ Copy & Run</h4>
+            <p>Fill in the blanks, then paste into SSH:</p>
             <button class="btn" onclick="copyScript()">📋 Copy Captain Install Script to Clipboard</button>
             <div id="output"></div>
         </div>
@@ -151,34 +133,35 @@
     <!-- WRAP UP -->
     <div class="step">
         <div class="script-box">
-            "Your Captain is live. Open Telegram — it should send you a message within the next minute. It'll start by asking about your business."<br><br>
+            "Your Captain is live. Open Telegram — it should message you within a minute."<br><br>
 
-            "From here on, it works for you. It'll send you a daily progress report every morning, and it'll proactively build things without you having to ask. If you don't respond to a question for 48 hours, it'll make the call itself and keep moving."<br><br>
+            "It'll start by asking about your situation: do you have an existing business, or are you starting something new? Just answer honestly — it takes it from there."<br><br>
 
-            "<strong>Let it lead. That's what it's built for.</strong>"
+            "From here on, <strong>it leads, you approve.</strong> It'll send you a daily report every morning. If you go quiet for 48 hours on a decision point, it'll make the call itself and keep building."
         </div>
     </div>
 
     <!-- WHAT THE CAPTAIN DOES -->
     <div class="step" style="border-top: 3px solid #333;">
-        <h2 style="margin-top: 0;">What the Captain Does (Reference)</h2>
+        <h2 style="margin-top: 0;">What the Captain Does</h2>
 
-        <h3>Phase 1: Discovery</h3>
+        <h3>Discovery</h3>
+        <p>First conversation determines your path:</p>
         <ul>
-            <li><strong>Path A (existing business):</strong> Researches the website, competitors, reviews. Comes back informed. Proposes a concrete first build.</li>
-            <li><strong>Path B1 (has idea):</strong> Validates the idea with market research. Proposes an MVP.</li>
-            <li><strong>Path B2 (no idea):</strong> Asks discovery questions. Surfaces 2-3 business ideas. Recommends one.</li>
+            <li><strong>Existing business:</strong> Captain researches your website, competitors, reviews. Comes back informed. Proposes a concrete first build.</li>
+            <li><strong>New business with idea:</strong> Validates the idea with market research. Proposes an MVP.</li>
+            <li><strong>New business, no idea:</strong> Asks discovery questions. Surfaces 2-3 ideas. Recommends one.</li>
         </ul>
 
-        <h3>Phase 2: Build Loop</h3>
+        <h3>Build Loop</h3>
         <ul>
-            <li><strong>Daily progress report</strong> every morning at 9 AM — what was built, what's next, what's needed from the customer.</li>
-            <li>Builds first, asks later. Ships ugly. Never waits for permission when it has enough information.</li>
+            <li><strong>Daily progress report</strong> at 9 AM — what was built, what's next, what's needed from you.</li>
+            <li>Builds first, asks later. Ships ugly. Never waits for permission.</li>
         </ul>
 
-        <h3>Phase 3: Autonomy</h3>
+        <h3>Autonomy</h3>
         <ul>
-            <li><strong>Dead Man's Switch:</strong> If the customer doesn't respond to a decision point in 48 hours, the Captain builds the recommended option and moves on.</li>
+            <li><strong>Dead Man's Switch:</strong> No response for 48 hours? Captain builds the recommended option and moves on.</li>
             <li><strong>Weekly check-in:</strong> Friday proactive suggestions for improvements.</li>
         </ul>
     </div>
@@ -194,61 +177,32 @@
             document.querySelectorAll('.radio-option').forEach(el => el.classList.remove('selected'));
             document.querySelectorAll('input:checked').forEach(el => el.closest('.radio-option').classList.add('selected'));
 
-            // Show/hide credential sections (hidden for "existing" which has everything already)
+            // Show/hide fresh-only sections
             document.querySelectorAll('.fresh-only').forEach(el => {
-                el.classList.toggle('hidden', installType === 'existing');
+                el.classList.toggle('hidden', installType !== 'fresh');
             });
-
-            // Toggle credential intro messages
-            const introFresh = document.getElementById('cred-intro-fresh');
-            const introExistingVps = document.getElementById('cred-intro-existing-vps');
-            if (introFresh) introFresh.classList.toggle('hidden', installType !== 'fresh');
-            if (introExistingVps) introExistingVps.classList.toggle('hidden', installType !== 'existing_vps');
-
-            // Toggle deploy intro messages
-            const deployExisting = document.getElementById('deploy-intro-existing');
-            const deployFresh = document.getElementById('deploy-intro-fresh');
-            if (deployExisting) deployExisting.classList.toggle('hidden', installType !== 'existing');
-            if (deployFresh) deployFresh.classList.toggle('hidden', installType === 'existing');
 
             generateScript();
         }
 
         function generateScript() {
             const installType = document.querySelector('input[name="install_type"]:checked').value;
-            const path = document.querySelector('input[name="path"]:checked').value;
-            const name = document.getElementById('customer_name').value || 'CUSTOMER_NAME';
-            const business = document.getElementById('business_name').value || 'BUSINESS_NAME';
-            const website = document.getElementById('website').value || 'none';
-
-            const slug = name.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, '');
-            const profileName = `captain-${slug}`;
-            const date = new Date().toISOString().split('T')[0];
 
             let s = '';
 
             // Header
             s += `#!/bin/bash\n`;
             s += `# ═══════════════════════════════════════════════════════════════\n`;
-            s += `# Captain Protocol — ${installType === 'fresh' ? 'Full Install' : 'Add to Existing Instance'}\n`;
-            s += `# Customer: ${name} (${business})\n`;
+            s += `# Captain Protocol — ${installType === 'fresh' ? 'Full Install' : installType === 'existing_vps' ? 'Add to Existing VPS' : 'Upgrade Existing'}\n`;
             s += `# FILL IN THE LINES BELOW, THEN PASTE THIS ENTIRE SCRIPT\n`;
             s += `# INTO YOUR SSH TERMINAL.\n`;
             s += `# ═══════════════════════════════════════════════════════════════\n\n`;
 
             // Credentials
+            s += `TELEGRAM_TOKEN="PASTE_CAPTAIN_BOT_TOKEN_HERE"\n`;
+            s += `TELEGRAM_USER_ID="PASTE_YOUR_TELEGRAM_USER_ID_HERE"\n`;
             if (installType === 'fresh') {
                 s += `OPENROUTER_KEY="PASTE_YOUR_OPENROUTER_KEY_HERE"\n`;
-                s += `TELEGRAM_TOKEN="PASTE_YOUR_TELEGRAM_BOT_TOKEN_HERE"\n`;
-                s += `TELEGRAM_USER_ID="PASTE_YOUR_TELEGRAM_USER_ID_HERE"\n`;
-            } else if (installType === 'existing_vps') {
-                s += `# Captain gets its own Telegram bot (separate from your main agent)\n`;
-                s += `TELEGRAM_TOKEN="PASTE_CAPTAIN_BOT_TOKEN_HERE"\n`;
-                s += `TELEGRAM_USER_ID="PASTE_YOUR_TELEGRAM_USER_ID_HERE"\n`;
-            } else {
-                s += `# If your bot token or user ID changed, update here:\n`;
-                s += `TELEGRAM_TOKEN=""\n`;
-                s += `TELEGRAM_USER_ID=""\n`;
             }
 
             s += `\n# ═══════════════════════════════════════════════════════════════\n`;
@@ -256,27 +210,15 @@
             s += `# ═══════════════════════════════════════════════════════════════\n`;
             s += `set -euo pipefail\n\n`;
 
-            s += `PROFILE_NAME="${profileName}"\n`;
-            s += `CUSTOMER_NAME="${name}"\n`;
-            s += `BUSINESS_NAME="${business}"\n`;
-            s += `WEBSITE="${website}"\n`;
-            s += `PATH="${path}"\n`;
-            s += `INSTALL_DATE="${date}"\n\n`;
+            s += `PROFILE_NAME="captain"\n`;
+            s += `PROFILE_DIR=~/.hermes/profiles/\${PROFILE_NAME}\n\n`;
 
             // Fresh install: full hermes setup
-            if (installType === 'fresh' || installType === 'existing_vps') {
+            if (installType === 'fresh') {
                 s += `echo "═══════════════════════════════════════════════════════"\n`;
-                if (installType === 'fresh') {
-                    s += `echo "  CAPTAIN PROTOCOL — Full Install"\n`;
-                } else {
-                    s += `echo "  CAPTAIN PROTOCOL — Add to Existing VPS"\n`;
-                }
+                s += `echo "  CAPTAIN PROTOCOL — Full Install"\n`;
                 s += `echo "═══════════════════════════════════════════════════════"\n\n`;
 
-            }
-
-            // Only install hermes on fresh (not existing_vps)
-            if (installType === 'fresh') {
                 s += `# System prep\n`;
                 s += `apt-get update && apt-get upgrade -y\n`;
                 s += `apt-get install -y git curl wget unzip build-essential\n\n`;
@@ -285,32 +227,14 @@
                 s += `mkdir -p ~/.hermes\n`;
                 s += `curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash -s -- --skip-setup\n\n`;
 
-                s += `# Environment (secrets)\n`;
+                s += `# Environment\n`;
                 s += `cat << ENVFILE > ~/.hermes/.env\n`;
                 s += `OPENROUTER_API_KEY=\${OPENROUTER_KEY}\n`;
                 s += `TELEGRAM_BOT_TOKEN=\${TELEGRAM_TOKEN}\n`;
                 s += `TELEGRAM_ALLOWED_USERS=\${TELEGRAM_USER_ID}\n`;
                 s += `TELEGRAM_HOME_CHANNEL=\${TELEGRAM_USER_ID}\n`;
                 s += `ENVFILE\n\n`;
-            }
 
-            // Existing VPS: add Captain bot token to existing .env
-            if (installType === 'existing_vps') {
-                s += `# Add Captain's bot token to .env\n`;
-                s += `# (Your main Hermes keeps its own token)\n`;
-                s += `if ! grep -q "CAPTAIN_TELEGRAM_BOT_TOKEN" ~/.hermes/.env; then\n`;
-                s += `    cat << ENVFILE >> ~/.hermes/.env\n`;
-                s += `CAPTAIN_TELEGRAM_BOT_TOKEN=\${TELEGRAM_TOKEN}\n`;
-                s += `CAPTAIN_TELEGRAM_ALLOWED_USERS=\${TELEGRAM_USER_ID}\n`;
-                s += `CAPTAIN_TELEGRAM_HOME_CHANNEL=\${TELEGRAM_USER_ID}\n`;
-                s += `ENVFILE\n`;
-                s += `    echo "Captain bot token added to .env"\n`;
-                s += `else\n`;
-                s += `    echo "Captain bot token already in .env, skipping"\n`;
-                s += `fi\n\n`;
-            }
-
-            if (installType === 'fresh' || installType === 'existing_vps') {
                 s += `# Config\n`;
                 s += `cat << YAMLFILE > ~/.hermes/config.yaml\n`;
                 s += `model:\n`;
@@ -319,42 +243,71 @@
                 s += `YAMLFILE\n\n`;
             }
 
+            // Existing VPS: append Captain env vars
+            if (installType === 'existing_vps') {
+                s += `echo "═══════════════════════════════════════════════════════"\n`;
+                s += `echo "  CAPTAIN PROTOCOL — Add to Existing VPS"\n`;
+                s += `echo "═══════════════════════════════════════════════════════"\n\n`;
+
+                s += `# Add Captain's bot token to .env\n`;
+                s += `# (Your main agent keeps its own token)\n`;
+                s += `if ! grep -q "CAPTAIN_TELEGRAM_BOT_TOKEN" ~/.hermes/.env 2>/dev/null; then\n`;
+                s += `    echo "" >> ~/.hermes/.env\n`;
+                s += `    echo "CAPTAIN_TELEGRAM_BOT_TOKEN=\${TELEGRAM_TOKEN}" >> ~/.hermes/.env\n`;
+                s += `    echo "CAPTAIN_TELEGRAM_ALLOWED_USERS=\${TELEGRAM_USER_ID}" >> ~/.hermes/.env\n`;
+                s += `    echo "CAPTAIN_TELEGRAM_HOME_CHANNEL=\${TELEGRAM_USER_ID}" >> ~/.hermes/.env\n`;
+                s += `    echo "Captain bot token added to .env"\n`;
+                s += `else\n`;
+                s += `    echo "Captain bot token already in .env, skipping"\n`;
+                s += `fi\n\n`;
+            }
+
+            // Existing instance: just create the profile
+            if (installType === 'existing') {
+                s += `echo "═══════════════════════════════════════════════════════"\n`;
+                s += `echo "  CAPTAIN PROTOCOL — Upgrade Existing"\n`;
+                s += `echo "═══════════════════════════════════════════════════════"\n\n`;
+
+                s += `# Update bot token in .env\n`;
+                s += `sed -i 's|^TELEGRAM_BOT_TOKEN=.*|TELEGRAM_BOT_TOKEN=\${TELEGRAM_TOKEN}|' ~/.hermes/.env\n`;
+                s += `sed -i 's|^TELEGRAM_ALLOWED_USERS=.*|TELEGRAM_ALLOWED_USERS=\${TELEGRAM_USER_ID}|' ~/.hermes/.env\n`;
+                s += `sed -i 's|^TELEGRAM_HOME_CHANNEL=.*|TELEGRAM_HOME_CHANNEL=\${TELEGRAM_USER_ID}|' ~/.hermes/.env\n`;
+                s += `echo "Bot token updated in .env"\n\n`;
+            }
+
             // Captain profile creation
             s += `# ─── Create Captain Profile ─────────────────────────────────\n`;
-            s += `echo "Creating Captain profile: \${PROFILE_NAME}"\n`;
-            s += `hermes profile create \${PROFILE_NAME} 2>/dev/null || true\n\n`;
-
-            s += `PROFILE_DIR=~/.hermes/profiles/\${PROFILE_NAME}\n`;
+            s += `echo "Creating Captain profile..."\n`;
+            s += `hermes profile create \${PROFILE_NAME} 2>/dev/null || true\n`;
             s += `mkdir -p \${PROFILE_DIR}/{sessions,logs,skills,memory}\n\n`;
 
-            // Captain system prompt
+            // Captain system prompt (generic — discovers everything through conversation)
             s += `# ─── Captain System Prompt ──────────────────────────────────\n`;
             s += `cat << 'CAPTAIN_EOF' > \${PROFILE_DIR}/memory/user_profile.md\n`;
-            s += getCaptainPrompt(name, business, website, path);
+            s += getCaptainPrompt();
             s += `\nCAPTAIN_EOF\n\n`;
 
             // Memory rules
             s += `# ─── Memory Rules ───────────────────────────────────────────\n`;
             s += `cat << 'MEMORY_EOF' > \${PROFILE_DIR}/memory/hermes_memory.md\n`;
-            s += getMemoryRules(name, business, path);
+            s += getMemoryRules();
             s += `\nMEMORY_EOF\n\n`;
 
-            // Customer JSON
-            s += `# ─── Customer Data ──────────────────────────────────────────\n`;
-            s += `cat << JSON_EOF > \${PROFILE_DIR}/memory/customer.json\n`;
+            // Customer data (blank — Captain fills this in)
+            s += `# ─── Profile Data ───────────────────────────────────────────\n`;
+            s += `cat << JSON_EOF > \${PROFILE_DIR}/memory/owner.json\n`;
             s += `{\n`;
-            s += `  "name": "${name}",\n`;
-            s += `  "business_name": "${business}",\n`;
-            s += `  "website": "${website}",\n`;
-            s += `  "install_date": "${date}",\n`;
-            s += `  "path": "${path}",\n`;
+            s += `  "name": null,\n`;
+            s += `  "business": null,\n`;
+            s += `  "website": null,\n`;
+            s += `  "install_date": "$(date +%Y-%m-%d)",\n`;
+            s += `  "path": null,\n`;
             s += `  "status": "discovery",\n`;
             s += `  "project": {\n`;
             s += `    "name": null,\n`;
             s += `    "type": null,\n`;
             s += `    "started": null,\n`;
-            s += `    "shipped": null,\n`;
-            s += `    "current_task": null\n`;
+            s += `    "shipped": null\n`;
             s += `  }\n`;
             s += `}\n`;
             s += `JSON_EOF\n\n`;
@@ -367,67 +320,62 @@
             s += `    {\n`;
             s += `      "name": "Daily Progress Report",\n`;
             s += `      "schedule": "0 9 * * *",\n`;
-            s += `      "prompt": "Read the project state from customer.json and recent activity logs. Send a concise daily progress report following the Captain Protocol format. If nothing happened yesterday, send a brief 'working on it' message instead of going silent."\n`;
+            s += `      "prompt": "Read the project state from owner.json and recent activity. Send a concise daily progress report following the Captain Protocol format. If nothing happened yesterday, send a brief update instead of going silent."\n`;
             s += `    },\n`;
             s += `    {\n`;
             s += `      "name": "Weekly Check-in",\n`;
             s += `      "schedule": "0 10 * * 5",\n`;
-            s += `      "prompt": "Review project status and recent interactions. Send a Friday check-in: how things are working, proactive improvement suggestions, and next feature recommendation if current project is stable."\n`;
+            s += `      "prompt": "Review project status and recent interactions. Send a Friday check-in: how things are working, proactive improvement suggestions, and next feature recommendation."\n`;
             s += `    },\n`;
             s += `    {\n`;
             s += `      "name": "Dead Man Switch",\n`;
             s += `      "schedule": "0 */12 * * *",\n`;
-            s += `      "prompt": "Check the last customer interaction. If an unanswered decision point is older than 48 hours, build the recommended option and send: 'I went ahead and built [X] since you were busy. Here is what it does: [brief explanation]. Let me know if you want changes.'"\n`;
+            s += `      "prompt": "Check the last interaction timestamp. If an unanswered decision point is older than 48 hours, build the recommended option and send: 'I went ahead and built [X] since you were busy. Here is what it does: [brief]. Let me know if you want changes.'"\n`;
             s += `    }\n`;
             s += `  ]\n`;
             s += `}\n`;
             s += `CRON_EOF\n\n`;
 
             // Profile config
-            // Profile config
-            if (installType === 'fresh' || installType === 'existing_vps') {
+            s += `# ─── Profile Config ─────────────────────────────────────────\n`;
+            if (installType === 'existing') {
+                s += `# Copy main config as base\n`;
+                s += `cp ~/.hermes/config.yaml \${PROFILE_DIR}/config.yaml 2>/dev/null || true\n\n`;
+            } else {
                 s += `cat << YAML_EOF > \${PROFILE_DIR}/config.yaml\n`;
                 s += `model:\n`;
                 s += `  default: google/gemini-2.5-flash\n`;
                 s += `  provider: openrouter\n`;
-                if (installType === 'existing_vps') {
-                    s += `\n# Captain uses its own Telegram bot token\n`;
-                    s += `# (loaded from CAPTAIN_TELEGRAM_BOT_TOKEN in .env)\n`;
-                }
                 s += `YAML_EOF\n\n`;
-            } else {
-                s += `# Copy main config as base\n`;
-                s += `cp ~/.hermes/config.yaml \${PROFILE_DIR}/config.yaml 2>/dev/null || true\n\n`;
             }
 
-            // First message script
+            // First message
             s += `# ─── First Message ──────────────────────────────────────────\n`;
-            s += `cat << MSG_EOF > \${PROFILE_DIR}/send_first_message.py\n`;
+            s += `cat << 'MSG_EOF' > \${PROFILE_DIR}/send_first_message.py\n`;
             s += `#!/usr/bin/env python3\n`;
-            s += `"""Send Captain Protocol first message to ${name}."""\n`;
+            s += `"""Send Captain's first message."""\n`;
             s += `import requests, sys, os\n\n`;
-            s += `token = os.environ.get("TELEGRAM_TOKEN", "")\n`;
-            s += `if not token:\n`;
-            s += `    # Read from .env\n`;
-            s += `    with open(os.path.expanduser("~/.hermes/.env")) as f:\n`;
-            s += `        for line in f:\n`;
-            s += `            if line.startswith("TELEGRAM_BOT_TOKEN="):\n`;
-            s += `                token = line.strip().split("=", 1)[1]\n\n`;
-            s += `chat_id = os.environ.get("TELEGRAM_USER_ID", "")\n`;
-            s += `if not chat_id:\n`;
-            s += `    with open(os.path.expanduser("~/.hermes/.env")) as f:\n`;
-            s += `        for line in f:\n`;
-            s += `            if line.startswith("TELEGRAM_HOME_CHANNEL="):\n`;
-            s += `                chat_id = line.strip().split("=", 1)[1]\n\n`;
+            s += `# Read from .env\n`;
+            s += `env = {}\n`;
+            s += `with open(os.path.expanduser("~/.hermes/.env")) as f:\n`;
+            s += `    for line in f:\n`;
+            s += `        if "=" in line and not line.strip().startswith("#"):\n`;
+            s += `            k, v = line.strip().split("=", 1)\n`;
+            s += `            env[k] = v\n\n`;
+            s += `# For existing_vps, use Captain-specific vars if available\n`;
+            s += `token = env.get("CAPTAIN_TELEGRAM_BOT_TOKEN") or env.get("TELEGRAM_BOT_TOKEN", "")\n`;
+            s += `chat_id = env.get("CAPTAIN_TELEGRAM_HOME_CHANNEL") or env.get("TELEGRAM_HOME_CHANNEL", "")\n\n`;
+            s += `msg = """Hey! I'm your Captain — your AI agent. I live on your server and work for you 24/7.
 
-            const greeting = getFirstMessage(name, business, path);
-            s += `msg = """${greeting}"""\n\n`;
+Let's figure out what we should build together.
+
+**Quick question: Do you have an existing business, or are you starting something new?**"""\n\n`;
             s += `resp = requests.post(\n`;
             s += `    f"https://api.telegram.org/bot{token}/sendMessage",\n`;
             s += `    json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"}\n`;
             s += `)\n`;
             s += `if resp.status_code == 200:\n`;
-            s += `    print(f"✓ First message sent to ${name}")\n`;
+            s += `    print("✓ First message sent")\n`;
             s += `else:\n`;
             s += `    print(f"✗ Failed: {resp.text}")\n`;
             s += `    sys.exit(1)\n`;
@@ -435,16 +383,16 @@
             s += `chmod +x \${PROFILE_DIR}/send_first_message.py\n\n`;
 
             // Start gateway
-            // Start gateway
-            if (installType === 'fresh' || installType === 'existing_vps') {
-                s += `echo "Installing and starting Telegram gateway..."\n`;
-                if (installType === 'existing_vps') {
-                    s += `# For existing VPS, gateway is already installed\n`;
-                    s += `# We just need to start the Captain profile's gateway\n`;
-                } else {
-                    s += `hermes gateway install\n`;
-                    s += `hermes gateway start\n`;
-                }
+            s += `# ─── Start Captain Gateway ──────────────────────────────────\n`;
+            if (installType === 'fresh') {
+                s += `hermes gateway install\n`;
+                s += `hermes gateway start\n`;
+                s += `sleep 5\n\n`;
+            } else if (installType === 'existing_vps') {
+                s += `# Gateway binary already installed — just start the Captain profile\n`;
+            } else {
+                s += `# Restart gateway to pick up the new bot token\n`;
+                s += `hermes gateway restart 2>/dev/null || true\n`;
                 s += `sleep 5\n\n`;
             }
 
@@ -454,129 +402,116 @@
             s += `sleep 5\n\n`;
 
             // Send first message
-            s += `echo "Sending first message to \${CUSTOMER_NAME}..."\n`;
+            s += `echo "Sending first message..."\n`;
             s += `python3 \${PROFILE_DIR}/send_first_message.py\n\n`;
 
             // Done
             s += `echo ""\n`;
             s += `echo "═══════════════════════════════════════════════════════"\n`;
             s += `echo "  ✓ CAPTAIN PROTOCOL ACTIVE"\n`;
-            s += `echo "  Profile: \${PROFILE_NAME}"\n`;
-            s += `echo "  Customer: \${CUSTOMER_NAME} (\${BUSINESS_NAME})"\n`;
-            s += `echo "  Path: \${PATH}"\n`;
             s += `echo ""\n`;
-            s += `echo "  The Captain will send a daily report at 9 AM."\n`;
-            s += `echo "  If the customer goes silent for 48h, it builds anyway."\n`;
+            s += `echo "  Profile: \${PROFILE_NAME}"\n`;
+            s += `echo "  Daily report: 9 AM"\n`;
+            s += `echo "  Dead man switch: 48h timeout"\n`;
+            s += `echo ""\n`;
+            s += `echo "  The Captain will message you on Telegram now."\n`;
+            s += `echo "  Answer its questions — it takes it from there."\n`;
             s += `echo "═══════════════════════════════════════════════════════"\n`;
 
             document.getElementById('output').textContent = s;
         }
 
-        function getCaptainPrompt(name, business, website, path) {
-            let p = '';
-            p += `# Captain Protocol — System Prompt\n\n`;
-            p += `You are a personal AI agent working for ${name}. You live on their server and work for them 24/7.\n\n`;
-            p += `## Your Role: The Captain\n\n`;
-            p += `You LEAD. ${name} approves. You are not a chatbot — you are a business partner who builds things.\n\n`;
-            p += `**You have bias toward action.** You build first, ask later. You ship ugly. You never wait for permission when you have enough information.\n\n`;
-            p += `**You are proactive.** You don't wait for ${name} to ask. You notice things, suggest things, build things. You send daily progress reports without being asked.\n\n`;
-            p += `**You speak plainly.** No jargon. No technical terms. ${name} is smart but not technical.\n\n`;
-            p += `**You make decisions.** When ${name} says "I don't know," you recommend. When there are 5 options, you present 1 with a brief "why."\n\n`;
-            p += `## Context\n\n`;
-            p += `- **Customer:** ${name}\n`;
-            p += `- **Business:** ${business}\n`;
-            p += `- **Website:** ${website}\n`;
-            p += `- **Path:** ${path}\n\n`;
-            p += `## The Captain Protocol\n\n`;
-            p += `### Phase 1: Discovery\n\n`;
+        function getCaptainPrompt() {
+            return `# Captain Protocol — System Prompt
 
-            if (path === 'A') {
-                p += `This customer has an existing business. Your first move:\n`;
-                p += `1. Research ${business} silently (${website}, competitors, reviews, social media)\n`;
-                p += `2. Come back informed with what you found\n`;
-                p += `3. Ask targeted questions based on your research\n`;
-                p += `4. Propose a concrete first build\n`;
-            } else if (path === 'B1') {
-                p += `This customer has a business idea. Your first move:\n`;
-                p += `1. Listen to their idea\n`;
-                p += `2. Ask validation questions (have they sold any? who buys? what's the smallest test?)\n`;
-                p += `3. Research the market (competitors, pricing, demand)\n`;
-                p += `4. Come back with a verdict and recommended MVP\n`;
-                p += `5. Build it\n`;
-            } else {
-                p += `This customer needs help finding what to build. Your first move:\n`;
-                p += `1. Ask discovery questions (what are they good at? what annoys them? who do they want to help?)\n`;
-                p += `2. Surface 2-3 business ideas from their answers\n`;
-                p += `3. Research the top candidates\n`;
-                p += `4. Recommend one path\n`;
-                p += `5. Build it\n`;
-            }
+You are a proactive AI agent. You live on the owner's server and work for them 24/7.
 
-            p += `\n### Phase 2: Build Loop\n\n`;
-            p += `**Daily progress report — every morning, non-negotiable:**\n\n`;
-            p += `\`\`\`\n`;
-            p += `[Project Name] — Day [N]\n\n`;
-            p += `What I built yesterday:\n`;
-            p += `- [specific feature or progress]\n\n`;
-            p += `What I'm building today:\n`;
-            p += `- [specific next step]\n\n`;
-            p += `What I need from you:\n`;
-            p += `- [question OR "Nothing — I've got it"]\n\n`;
-            p += `ETA for [milestone]: [date]\n`;
-            p += `\`\`\`\n\n`;
-            p += `### Phase 3: Autonomy\n\n`;
-            p += `**Dead Man's Switch:** If ${name} doesn't respond to a decision point in 48 hours, build the recommended option and send: "I went ahead and built [X] since you were busy. Here's what it does: [brief]. Let me know if you want changes."\n\n`;
-            p += `**Weekly Check-in:** Every Friday, send a proactive message: how things are working, improvements you noticed, next feature suggestion.\n\n`;
-            p += `## Rules\n\n`;
-            p += `1. Never overwhelm ${name} with options. Present 1 recommendation with "why."\n`;
-            p += `2. Ship ugly. A working prototype beats a perfect plan.\n`;
-            p += `3. If something breaks, fix it silently and mention it in the daily report. Don't panic.\n`;
-            p += `4. Keep the daily report under 10 lines. Short, punchy, actionable.\n`;
-            p += `5. You have access to GitHub and Vercel. Push code and deploy without asking.\n`;
+## Your Role: The Captain
 
-            return p;
+You LEAD. The owner approves. You are not a chatbot — you are a business partner who builds things.
+
+**You have bias toward action.** You build first, ask later. You ship ugly. You never wait for permission when you have enough information.
+
+**You are proactive.** You don't wait to be asked. You notice things, suggest things, build things. You send daily progress reports without being asked.
+
+**You speak plainly.** No jargon. No technical terms. The owner is smart but not technical.
+
+**You make decisions.** When the owner says "I don't know," you recommend. When there are 5 options, you present 1 with a brief "why." You never overwhelm.
+
+## The Captain Protocol
+
+### Phase 1: Discovery
+
+Your FIRST interaction starts with: "Do you have an existing business, or are you starting something new?"
+
+**Path A: Existing Business**
+1. Ask: "What's your website?"
+2. Research their business silently (website, competitors, reviews, social media)
+3. Come back informed with findings
+4. Ask targeted questions based on what you found
+5. Propose a concrete first build
+
+**Path B1: New Business — Has an Idea**
+1. Listen to their idea
+2. Ask validation questions (have they sold any? who buys? what's the smallest test?)
+3. Research the market (competitors, pricing, demand)
+4. Come back with a verdict and recommended MVP
+5. Build it
+
+**Path B2: New Business — No Idea**
+1. Ask discovery questions (what are they good at? what annoys them? who do they want to help?)
+2. Surface 2-3 business ideas from their answers
+3. Research the top candidates
+4. Recommend one path
+5. Build it
+
+### Phase 2: Build Loop
+
+**Daily progress report — every morning, non-negotiable:**
+
+[Project Name] — Day [N]
+
+What I built yesterday:
+- [specific feature or progress]
+
+What I'm building today:
+- [specific next step]
+
+What I need from you:
+- [question OR "Nothing — I've got it"]
+
+ETA for [milestone]: [date]
+
+### Phase 3: Autonomy
+
+**Dead Man's Switch:** If the owner doesn't respond to a decision point in 48 hours, build the recommended option and send: "I went ahead and built [X] since you were busy. Here's what it does: [brief]. Let me know if you want changes."
+
+**Weekly Check-in:** Every Friday, send a proactive message: how things are working, improvements you noticed, next feature suggestion.
+
+## Rules
+
+1. Never overwhelm with options. Present 1 recommendation with "why."
+2. Ship ugly. A working prototype beats a perfect plan.
+3. If something breaks, fix it silently and mention it in the daily report.
+4. Keep the daily report under 10 lines. Short, punchy, actionable.
+5. You have access to GitHub and Vercel. Push code and deploy without asking.
+6. Update owner.json as you learn about the business.
+`;
         }
 
-        function getMemoryRules(name, business, path) {
-            let m = '';
-            m += `# Captain Protocol — Memory Rules\n\n`;
-            m += `## About ${name}\n`;
-            m += `- Business: ${business}\n`;
-            m += `- Path: ${path}\n`;
-            m += `- Technical level: Non-technical. Explain everything in plain language.\n`;
-            m += `- Communication preference: Keep it short. They're busy.\n\n`;
-            m += `## Operational Rules\n`;
-            m += `- Daily report goes out at 9 AM regardless of activity\n`;
-            m += `- Decision timeout: 48 hours, then build the recommended option\n`;
-            m += `- Never ask more than one question at a time\n`;
-            m += `- When presenting work, show what it does, not how it works\n`;
-            m += `- Track all projects in customer.json\n`;
-            m += `- Update status field: discovery → building → shipped → iterating\n`;
+        function getMemoryRules() {
+            return `# Captain Protocol — Memory Rules
 
-            return m;
-        }
-
-        function getFirstMessage(name, business, path) {
-            if (path === 'A') {
-                return `Hey ${name}! I'm your AI agent \\u2014 I live on your server and work for you 24/7.
-
-I already did some homework on ${business}. Before I share what I found, one question:
-
-**Do you have an existing website, or are you starting from scratch?**`;
-            } else if (path === 'B1') {
-                return `Hey ${name}! I'm your AI agent \\u2014 I live on your server and work for you 24/7.
-
-I heard you have a business idea you want to build. I'd love to hear about it.
-
-**Tell me about your idea \\u2014 what are you thinking?**`;
-            } else {
-                return `Hey ${name}! I'm your AI agent \\u2014 I live on your server and work for you 24/7.
-
-Let's figure out what we should build together. Two options:
-
-**Got an idea already?** Tell me about it.
-**Not sure yet?** Just say "let's figure it out" and I'll ask you a few questions.`;
-            }
+## Operational Rules
+- Daily report goes out at 9 AM regardless of activity
+- Decision timeout: 48 hours, then build the recommended option
+- Never ask more than one question at a time
+- When presenting work, show what it does, not how it works
+- Track all projects in owner.json
+- Update status field: discovery → building → shipped → iterating
+- Learn the owner's name and use it naturally
+- Learn the business name and reference it in reports
+`;
         }
 
         function copyScript() {
