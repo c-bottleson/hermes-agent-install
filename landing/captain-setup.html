@@ -66,13 +66,59 @@
     <!-- PHASE 2: CREDENTIALS -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div class="phase-header">
-        <h2>PHASE 2: CREDENTIALS</h2>
+        <h2>PHASE 2: VPS & CREDENTIALS</h2>
         <p>Save everything to your notepad.</p>
+    </div>
+
+    <!-- VPS SETUP (existing_vps + fresh) -->
+    <div class="step vps-needed">
+        <h3><span class="step-number">2</span> Provision the Captain's VPS</h3>
+        <div class="info-box">
+            <strong>⏱ Note:</strong> VPS provisioning takes 15-30 min on Contabo (instant on Vultr). Set up the other accounts while you wait.
+        </div>
+        <div class="action-box">
+            <h4>🖱️ Select VPS</h4>
+            <div class="radio-group">
+                <label class="radio-option selected"><input type="radio" name="vps" value="contabo" checked onchange="generateScript()"> <strong>Contabo</strong> — $6/mo, raw power <span style="color: #888; font-size: 0.85em;">(recommended)</span></label>
+                <label class="radio-option"><input type="radio" name="vps" value="vultr" onchange="generateScript()"> <strong>Vultr</strong> — $10/mo, polished UI</label>
+            </div>
+        </div>
+
+        <!-- Contabo instructions -->
+        <div id="vps-contabo" style="margin-top: 15px;">
+            <ol style="font-size: 14px;">
+                <li>Go to <code>contabo.com</code> → <strong>Cloud VPS</strong></li>
+                <li>Select <strong>Cloud VPS 1</strong> ($5.99/mo)</li>
+                <li><strong>Term Length:</strong> 1 Month</li>
+                <li><strong>Region:</strong> Closest or cheapest</li>
+                <li><strong>Storage:</strong> 50GB NVMe</li>
+                <li style="color: red; font-weight: bold;">⚠️ <strong>OS:</strong> Ubuntu 24.04 LTS — do NOT pick anything else</li>
+                <li><strong>Password:</strong> Generate and save in notepad:<br>
+                    <code>VPS Root Password: _______________</code></li>
+                <li>Check out. Save the IP when it arrives (15-30 min):<br>
+                    <code>VPS IP Address: _______________</code></li>
+            </ol>
+        </div>
+
+        <!-- Vultr instructions -->
+        <div id="vps-vultr" class="hidden" style="margin-top: 15px;">
+            <ol style="font-size: 14px;">
+                <li>Go to <code>vultr.com</code> → sign up, add CC</li>
+                <li><strong>Deploy New Instance</strong> → <strong>Cloud Compute</strong> → <strong>Shared CPU</strong></li>
+                <li><strong>Location:</strong> Closest to you</li>
+                <li style="color: red; font-weight: bold;">⚠️ <strong>OS:</strong> Ubuntu 24.04 LTS</li>
+                <li><strong>Size:</strong> 1 vCPU / 2GB RAM ($10/mo)</li>
+                <li><strong>Uncheck</strong> "Enable automated backups"</li>
+                <li>Deploy Now. Save in notepad:<br>
+                    <code>VPS IP Address: _______________</code><br>
+                    <code>VPS Root Password: _______________</code></li>
+            </ol>
+        </div>
     </div>
 
     <!-- NEW BOT NEEDED -->
     <div class="step">
-        <h3><span class="step-number">2</span> Create a New Telegram Bot for the Captain</h3>
+        <h3><span class="step-number">3</span> Create a New Telegram Bot for the Captain</h3>
         <div class="script-box">
             "The Captain needs its own Telegram bot — separate from any existing agent. This takes about 2 minutes."
         </div>
@@ -181,6 +227,16 @@
             document.querySelectorAll('.fresh-only').forEach(el => {
                 el.classList.toggle('hidden', installType !== 'fresh');
             });
+
+            // Show/hide VPS section (hidden for "existing" which already has a VPS)
+            document.querySelectorAll('.vps-needed').forEach(el => {
+                el.classList.toggle('hidden', installType === 'existing');
+            });
+
+            // Toggle VPS instructions
+            const vps = document.querySelector('input[name="vps"]:checked')?.value || 'contabo';
+            document.getElementById('vps-contabo').classList.toggle('hidden', vps !== 'contabo');
+            document.getElementById('vps-vultr').classList.toggle('hidden', vps !== 'vultr');
 
             generateScript();
         }
