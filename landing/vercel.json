@@ -4,6 +4,7 @@
     { "source": "/skills", "destination": "/skills.html" },
     { "source": "/audit", "destination": "/audit.html" },
     { "source": "/review", "destination": "/review.html" },
-    { "source": "/teleprompter", "destination": "/teleprompter.html" }
+    { "source": "/teleprompter", "destination": "/teleprompter.html" },
+    { "source": "/captain-setup", "destination": "/captain-setup.html" }
   ]
 }
