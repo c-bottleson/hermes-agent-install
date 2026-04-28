@@ -89,6 +89,21 @@
         </div>
     </div>
 
+    <!-- LLM MODEL -->
+    <div class="step">
+        <h3><span class="step-number">3</span> LLM Brain</h3>
+        <div class="script-box">
+            "Same two tiers as the main agent — pick one. The Captain can always switch later."
+        </div>
+        <div class="action-box">
+            <h4>🖱️ Select Model Tier</h4>
+            <div class="radio-group">
+                <label class="radio-option selected"><input type="radio" name="model" value="mid" checked onchange="generateScript()"> <strong>Mid Tier</strong> — Sonnet 4.6 / Gemini 2.5 Pro <span style="color: #888; font-size: 0.85em;">(~$5-15/mo, recommended)</span></label>
+                <label class="radio-option"><input type="radio" name="model" value="top" onchange="generateScript()"> <strong>Top Tier</strong> — Opus 4.7 / GPT 5.5 <span style="color: #888; font-size: 0.85em;">(~$15-30/mo)</span></label>
+            </div>
+        </div>
+    </div>
+
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <!-- PHASE 2: CREDENTIALS -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
@@ -255,6 +270,8 @@
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <script>
         function updateAll() {
+            const modelMap = { 'mid': 'anthropic/claude-sonnet-4.6', 'top': 'anthropic/claude-opus-4.7' };
+            const model = modelMap[document.querySelector('input[name="model"]:checked').value];
             const profileName = document.getElementById('profile_name').value || 'captain';
 
             // Update info box
@@ -333,7 +350,7 @@
                 s += `# Config\n`;
                 s += `cat << YAMLFILE > ~/.hermes/config.yaml\n`;
                 s += `model:\n`;
-                s += `  default: google/gemini-2.5-flash\n`;
+                s += `  default: ${model}\n`;
                 s += `  provider: openrouter\n`;
                 s += `YAMLFILE\n\n`;
             }
@@ -443,7 +460,7 @@
             } else {
                 s += `cat << YAML_EOF > \${PROFILE_DIR}/config.yaml\n`;
                 s += `model:\n`;
-                s += `  default: google/gemini-2.5-flash\n`;
+                s += `  default: ${model}\n`;
                 s += `  provider: openrouter\n`;
                 s += `YAML_EOF\n\n`;
             }
