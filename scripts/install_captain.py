@@ -26,6 +26,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 from datetime import datetime
 from pathlib import Path
 
@@ -235,17 +236,28 @@ memory:
         json.dumps(customer_data, indent=2)
     )
 
-    # ── 5. Set up cron jobs ─────────────────────────────────────────────
-    print("\nSetting up cron jobs...")
+    # ── 5. Register cron jobs ──────────────────────────────────────────
+    print("\nRegistering cron jobs...")
     crons = json.loads(read_template(PROFILE_TEMPLATE_DIR / "crons.json"))
-    cron_summary = []
     for job in crons.get("jobs", []):
-        cron_summary.append(f"  • {job['name']} — {job['schedule']}")
-    if cron_summary:
-        print("  Cron jobs defined:")
-        for line in cron_summary:
-            print(line)
-        write_file(profile_dir / "crons.json", json.dumps(crons, indent=2))
+        name = job["name"]
+        schedule = job["schedule"]
+        prompt_text = job["prompt"]
+        deliver = job.get("deliver", "origin")
+        print(f"  • {name} ({schedule})")
+        # Write prompt to temp file to avoid shell escaping issues
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+            f.write(prompt_text)
+            prompt_file = f.name
+        run(
+            f"hermes --profile {profile_name} cron create "
+            f"'{schedule}' "
+            f"\"$(cat {prompt_file})\" "
+            f"--name '{name}' "
+            f"--deliver '{deliver}'",
+            check=False
+        )
+        os.unlink(prompt_file)
     print()
 
     # ── 6. Generate first-message script ────────────────────────────────
@@ -310,15 +322,15 @@ else:
     # ── 8. Optionally start ─────────────────────────────────────────────
     if args.start:
         print("Starting gateway...")
-        run(f"hermes gateway install --profile {profile_name}", check=False)
-        run(f"hermes gateway start --profile {profile_name}", check=False)
+        run(f"hermes --profile {profile_name} gateway install", check=False)
+        run(f"hermes --profile {profile_name} gateway start", check=False)
         print("\nSending first message...")
         run(f"python3 {profile_dir}/send_first_message.py", check=False)
     else:
         start_now = prompt("Start the gateway now? (y/n)", "y").lower()
         if start_now == "y":
-            run(f"hermes gateway install --profile {profile_name}", check=False)
-            run(f"hermes gateway start --profile {profile_name}", check=False)
+            run(f"hermes --profile {profile_name} gateway install", check=False)
+            run(f"hermes --profile {profile_name} gateway start", check=False)
             send = prompt("Send first message to customer? (y/n)", "y").lower()
             if send == "y":
                 run(f"python3 {profile_dir}/send_first_message.py", check=False)

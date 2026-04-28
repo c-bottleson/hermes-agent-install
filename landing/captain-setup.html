@@ -428,29 +428,35 @@
             s += `}\n`;
             s += `JSON_EOF\n\n`;
 
-            // Cron jobs
-            s += `# ─── Cron Jobs ──────────────────────────────────────────────\n`;
-            s += `cat << 'CRON_EOF' > \${PROFILE_DIR}/crons.json\n`;
-            s += `{\n`;
-            s += `  "jobs": [\n`;
-            s += `    {\n`;
-            s += `      "name": "Daily Progress Report",\n`;
-            s += `      "schedule": "0 9 * * *",\n`;
-            s += `      "prompt": "Read the project state from owner.json and recent activity. Send a concise daily progress report following the Captain Protocol format. If nothing happened yesterday, send a brief update instead of going silent."\n`;
-            s += `    },\n`;
-            s += `    {\n`;
-            s += `      "name": "Weekly Check-in",\n`;
-            s += `      "schedule": "0 10 * * 5",\n`;
-            s += `      "prompt": "Review project status and recent interactions. Send a Friday check-in: how things are working, proactive improvement suggestions, and next feature recommendation."\n`;
-            s += `    },\n`;
-            s += `    {\n`;
-            s += `      "name": "Dead Man Switch",\n`;
-            s += `      "schedule": "0 */12 * * *",\n`;
-            s += `      "prompt": "Check the last interaction timestamp. If an unanswered decision point is older than 48 hours, build the recommended option and send: 'I went ahead and built [X] since you were busy. Here is what it does: [brief]. Let me know if you want changes.'"\n`;
-            s += `    }\n`;
-            s += `  ]\n`;
-            s += `}\n`;
-            s += `CRON_EOF\n\n`;
+            // Cron jobs — register directly with Hermes scheduler
+            s += `# ─── Cron Jobs ──────────────────────────────────────────────\\n`;
+            s += `echo "Registering cron jobs..."\\n`;
+
+            // Daily Progress Report
+            s += `hermes --profile \\${PROFILE_NAME} cron create "0 9 * * *" "`;
+            s += `Read the project state from customer.json and recent activity logs. `;
+            s += `Send a daily COO-to-CEO report: 5 words max per line item. `;
+            s += `Format: [Project] — Day [N], Status/Done/Blocked/Next bullets. `;
+            s += `End with a Next Improvements section suggesting the highest-leverage improvement. `;
+            s += `If nothing pending, suggest the next feature or optimization. `;
+            s += `Under 25 lines." `;
+            s += `--name "Daily Progress Report" --deliver origin\\n\\n`;
+
+            // Weekly Check-in
+            s += `hermes --profile \\${PROFILE_NAME} cron create "0 10 * * 5" "`;
+            s += `Review project status and recent interactions. `;
+            s += `Send a friendly Friday check-in: how things are working, `;
+            s += `proactive improvement suggestions, and next feature recommendation. `;
+            s += `Keep it warm and non-technical." `;
+            s += `--name "Weekly Check-in" --deliver origin\\n\\n`;
+
+            // Dead Man's Switch
+            s += `hermes --profile \\${PROFILE_NAME} cron create "0 */12 * * *" "`;
+            s += `Check the last interaction timestamp. If an unanswered decision point `;
+            s += `is older than 48 hours, build the recommended option and send: `;
+            s += `'I went ahead and built [X] since you were busy. `;
+            s += `Here is what it does: [brief]. Let me know if you want changes.'" `;
+            s += `--name "Dead Man Switch" --deliver origin\\n\\n`;
 
             // Profile config
             s += `# ─── Profile Config ─────────────────────────────────────────\n`;
