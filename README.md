@@ -15,6 +15,7 @@ When someone buys an **AI Agent Setup ($399)**, you walk them through installing
 
 | Product | Price | Page |
 |---------|-------|------|
+| **AI Assessment** | $999 | [/assessment](https://hermes-agent-install.vercel.app/assessment) |
 | **AI Agent Setup** | $399 | [/](https://hermes-agent-install.vercel.app/) |
 | **Captain Protocol** | $199 | [/captain](https://hermes-agent-install.vercel.app/captain) |
 | **Custom Skills** | $149/skill | [/skills](https://hermes-agent-install.vercel.app/skills) |
@@ -68,12 +69,18 @@ hermes-agent-install/
 │       └── crons.json          # Scheduled jobs (daily report, weekly check-in)
 ├── landing/                    # Vercel deployment (customer-facing pages)
 │   ├── index.html              # Agent Install ($399)
+│   ├── assessment.html         # AI Assessment ($999)
 │   ├── captain.html            # Captain Protocol ($199)
 │   ├── skills.html             # Custom Skills ($149)
 │   ├── audit.html              # Growth Audit ($199)
 │   ├── review.html             # 3-Month Review Pack ($149)
 │   ├── vercel.json             # URL rewrites
 │   └── assets/style.css        # Shared styles
+├── docs/                       # Internal playbooks & teaching materials
+│   ├── assessment_playbook.md  # How to deliver the $999 Assessment
+│   ├── agent_setup_teachings.md # Core curriculum for $399 Install
+│   ├── agent_setup_advanced.md  # Advanced topics (councils, routing, etc.)
+│   └── marketing_copy.md        # Ad scripts & direct mail copy
 └── README.md
 ```
 
