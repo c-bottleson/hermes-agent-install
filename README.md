@@ -82,6 +82,7 @@ hermes-agent-install/
 │   ├── agent_setup_advanced.md  # Advanced topics (councils, routing, etc.)
 │   ├── marketing_copy.md        # Ad scripts & direct mail copy
 │   ├── profile_isolation.md     # CRITICAL: Multi-profile architecture rules
+│   ├── captain_architecture.md  # Constitution + Protocol design doc
 │   └── skipper_onboarding.md    # Skipper instance onboarding doc
 └── README.md
 ```
